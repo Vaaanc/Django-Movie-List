@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Movie List{% endblock %}
+
+{% block content %}
+  {% if messages %}
+    {% for message in messages %}
+      <h1>{{ message }}</h1>
+    {% endfor %}
+    <h1>{{ success_message }}</h1>
+  {% endif %}
+  {% if movies %}
+  <h1>Movie List</h1>
+  <a href="{% url 'movie:add_movie' %}" class="button">Add Movie</a>
+    {% for movie in movies %}
+    <div class="movie-card">
+      <span class="pull-right"><a href="{% url 'movie:update_movie' movie.slug %}">Edit</a></span>
+      <div class="title"><a href="{% url 'movie:movie_detail' movie.slug %}">{{ movie.title }}</a></div>
+      <div class="body">{{ movie.body|truncatewords:10 |linebreaks }}</div>
+
+    </div>
+    {% endfor %}
+  {% else %}
+  <h2>No Movie list :(</h2>
+  {% endif %}
+
+{% if is_paginated %}
+  <div class="pagination">
+    <span class="step-links">
+      {% if page_obj.has_previous %}
+        <a href="?page_obj = {{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+      <span class="current">Page {{ page_obj.number }} of {{page_obj.paginator.num_pages}}</span>
+      {% if page_obj.has_next %}
+      <a href="?page={{page_obj.next_page_number}}">Next</a>
+      {% endif %}
+    </span>
+  </div>
+{% endif %}
+{% endblock %}

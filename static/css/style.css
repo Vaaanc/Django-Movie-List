@@ -1,0 +1,12 @@
+.movie-card{
+  background: ghostwhite;
+  padding: 10px;
+  border: 1px solid #cecdcd;
+  margin: 10px 0 10px 0;
+}
+.button{
+  padding: 10px;
+  background: #3e3b3b;
+  color: white;
+  border-radius: 5px;
+}

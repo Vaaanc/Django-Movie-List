@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ movie.title }}{% endblock %}
+
+{% block content %}
+<h2>Title: {{ movie.title }}</h2>
+<h2>Body:</h2>
+<p>{{ movie.body }}</p>
+{% endblock %}
