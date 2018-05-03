@@ -7,7 +7,13 @@ class MoviePageForm(forms.ModelForm):
         self.fields['title'].widget.attrs.update({'class': 'input-text'})
         self.fields['body'].widget.attrs.update({'class': 'input-text'})
         self.fields['is_active'].widget.attrs.update({'class': 'input-checkbox'})
+        self.fields['picture'].widget.attrs.update({'class': 'input-picture'})
 
     class Meta:
         model = Movie
-        fields = ('title', 'body', 'is_active')
+        fields = ('title', 'body', 'is_active', 'picture')
+
+class SoftDeleteForm(forms.ModelForm):
+    class Meta:
+        model = Movie
+        fields = ('picture',)

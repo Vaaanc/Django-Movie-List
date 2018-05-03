@@ -11,12 +11,16 @@ class IsActiveManager(models.Manager):
 
 # Create your models here.
 class Movie(models.Model):
-    title = models.CharField(max_length = 200, unique=True)
+    title = models.CharField(max_length = 200)
     slug = models.SlugField(max_length = 200, unique_for_date = 'created')
     body = models.TextField()
+    picture = models.ImageField(upload_to='movie_images', blank=True)
     is_active = models.BooleanField(default = True)
+    likes = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add = True)
     updated = models.DateTimeField(auto_now = True)
+
+    objects = models.Manager() # Default Manager
     active = IsActiveManager() # Custom Manager - Get all active movie
 
     class Meta:
