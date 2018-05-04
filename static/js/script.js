@@ -1,9 +1,20 @@
-$('#modalDelete').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget) // Button that triggered the modal
-  var recipient = button.data('name') // Extract info from data-* attributes
-  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-  var modal = $(this)
-  modal.find('.modal-body p').text("Are you sure you want to delete " + recipient)
-  modal.find('.modal-body form').attr("action", button.data('url'))
-})
+$(document).ready(function(){
+  $('#modalDelete').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget)
+    var recipient = button.data('name')
+    var modal = $(this)
+    modal.find('.modal-body p').text("Are you sure you want to delete " + recipient)
+    modal.find('.modal-body form').attr("action", button.data('url'))
+  })
+
+    $('.likes').on('click', function(){
+      var movie_id, movie_slug;
+      button = $(this)
+      movie_slug = $(this).attr("data-slug");
+      movie_id = $(this).attr("data-movieid");
+      $.get('/movie/'+movie_slug+'/like/', {movie_id: movie_id}, function(data){
+        button.hide();
+        button.next('#like_count').html('Likes: '+data);
+    });
+  });
+});

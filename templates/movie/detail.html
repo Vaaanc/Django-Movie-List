@@ -3,7 +3,19 @@
 {% block title %}{{ movie.title }}{% endblock %}
 
 {% block content %}
-<h2>Title: {{ movie.title }}</h2>
-<h2>Body:</h2>
-<p>{{ movie.body }}</p>
+<div class="fluid-container">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="movie-image">
+        <img src = "/media/{{ movie.picture }}" class="movie-pic"/>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="info">
+        <div class="title"><h2>{{movie.title}}</h2></div>
+        <div class="body"><p>{{movie.body|linebreaks}}</p></div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
