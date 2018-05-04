@@ -15,7 +15,7 @@ from django.contrib.auth.decorators import login_required
 class MovieListView(ListView):
     queryset = Movie.active.all().order_by('title')
     context_object_name = 'movies'
-    paginate_by = 12 # 12 Movies per page
+    paginate_by = 4 # 4 Movies per page
     template_name = 'movie/list.html'
 
     def get_context_data(self, **kwargs):

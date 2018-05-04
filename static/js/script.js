@@ -17,4 +17,19 @@ $(document).ready(function(){
         button.next('#like_count').html('Likes: '+data);
     });
   });
+  
+  showMovieCards();
+  function showMovieCards(){
+    var time = 0
+    $('.movie-card').each(function() {
+      var $this = $(this);
+      setTimeout( function(){
+        $this.css({
+          'transform': 'translateY(0)',
+          'opacity' : '1'
+        });
+      }, time)
+      time += 300;
+    });
+  }
 });
