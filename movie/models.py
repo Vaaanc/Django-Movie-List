@@ -4,24 +4,26 @@ from __future__ import unicode_literals
 from django.db import models
 from django.template.defaultfilters import slugify
 
-# Model Manager Get all active movies
+
 class IsActiveManager(models.Manager):
     def get_queryset(self):
-        return super(IsActiveManager, self).get_queryset().filter(is_active = True)
+        return super(IsActiveManager, self).get_queryset()\
+            .filter(is_active=True)
+
 
 # Create your models here.
 class Movie(models.Model):
-    title = models.CharField(max_length = 200, unique=True)
-    slug = models.SlugField(max_length = 200)
+    title = models.CharField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=200)
     body = models.TextField()
     picture = models.ImageField(upload_to='movie_images', blank=True)
-    is_active = models.BooleanField(default = True)
+    is_active = models.BooleanField(default=True)
     likes = models.IntegerField(default=0)
-    created = models.DateTimeField(auto_now_add = True)
-    updated = models.DateTimeField(auto_now = True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
-    objects = models.Manager() # Default Manager
-    active = IsActiveManager() # Custom Manager - Get all active movie
+    objects = models.Manager()  # Default Manager
+    active = IsActiveManager()  # Custom Manager - Get all active movie
 
     class Meta:
         ordering = ('title',)

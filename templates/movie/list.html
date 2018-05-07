@@ -6,10 +6,10 @@
 
 {% block content %}
 
-  {% if not is_visited %}
-    <h2>Welcome to our site!</h2>
-  {% else %}
+  {% if visit %}
     <h3 class = "last_visit">You've visited this page last {{ visit }}</h3>
+  {% else %}
+    <h2>Welcome to our site!</h2>
   {% endif %}
 
   {% if messages %}

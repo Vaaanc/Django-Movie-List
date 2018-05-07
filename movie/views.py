@@ -17,22 +17,21 @@ from django.views.generic.detail import SingleObjectMixin
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
+
 class MovieListView(ListView):
     queryset = Movie.active.all().order_by('title')
     context_object_name = 'movies'
-    paginate_by = 4 # 4 Movies per page
+    paginate_by = 4
     template_name = 'movie/list.html'
 
     def get_context_data(self, **kwargs):
         context = super(MovieListView, self).get_context_data(**kwargs)
-        # GET LAST VISIT
         last_visit = self.request.session.get('latest_visit')
-        is_visited = False
-        
+
         if last_visit:
-            # If user already visited, update is_visited to true then visit to print = last visit then update latest to now
-            is_visited = True
+            # If user already visited,
+            # Then visit_to_print = latest_visit
+            # then update latest_visit to now
             self.request.session['visit_to_print'] = last_visit
             self.request.session['latest_visit'] = datetime.now().strftime("%b %d %Y %I:%M %p")
         else:
@@ -41,8 +40,8 @@ class MovieListView(ListView):
             self.request.session['visit_to_print'] = None
 
         context['visit'] = self.request.session['visit_to_print']
-        context['is_visited'] = is_visited
         return context
+
 
 class MovieDetailView(DetailView):
     model = Movie
@@ -53,6 +52,7 @@ class MovieDetailView(DetailView):
         queryset = self.model.active.all()
         return queryset
 
+
 class AddMovieView(SuccessMessageMixin, CreateView):
     form_class = MoviePageForm
     success_url = '/movie/'
@@ -61,9 +61,10 @@ class AddMovieView(SuccessMessageMixin, CreateView):
     login_required = True
 
     def form_valid(self, form):
-        new_movie = form.save(commit = False)
+        new_movie = form.save(commit=False)
         new_movie.save()
         return super(AddMovieView, self).form_valid(form)
+
 
 class UpdateMovieView(SuccessMessageMixin, UpdateView):
     model = Movie
@@ -77,6 +78,7 @@ class UpdateMovieView(SuccessMessageMixin, UpdateView):
         queryset = self.model.active.all()
         return queryset
 
+
 class SoftDeleteView(SuccessMessageMixin, SingleObjectMixin, View):
     model = Movie
     login_required = True
@@ -88,13 +90,14 @@ class SoftDeleteView(SuccessMessageMixin, SingleObjectMixin, View):
         movie.save()
         return HttpResponseRedirect('/movie/')
 
+
 class LikeView(SingleObjectMixin, View):
     model = Movie
     login_required = True
 
     def get(self, *args, **kwargs):
         print self.request.GET['movie_id']
-        movie = Movie.objects.get(id = self.request.GET['movie_id'])
+        movie = Movie.objects.get(id=self.request.GET['movie_id'])
         movie.likes += 1
         likes = movie.likes
         movie.save()
