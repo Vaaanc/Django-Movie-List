@@ -15,7 +15,7 @@ class MoviePageForm(forms.ModelForm):
             'rows': '16'
             })
         self.fields['picture'].widget.attrs.update({
-        'class': 'input-picture'
+            'class': 'input-picture'
         })
 
     class Meta:
