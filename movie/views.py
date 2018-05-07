@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
 from datetime import datetime
+
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import HttpResponse
 from django.shortcuts import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic import CreateView
@@ -53,47 +55,39 @@ class MovieDetailView(DetailView):
     context_object_name = 'movie'
 
 
-class AddMovieView(SuccessMessageMixin, CreateView):
+class MovieCreateView(SuccessMessageMixin, CreateView):
     form_class = MoviePageForm
     success_url = reverse_lazy('movie:movie_list')
-    template_name = 'movie/add_movie.html'
+    template_name = 'movie/add_update_form.html'
     success_message = "%(title)s created successfully!"
-    login_required = True
-
-    def form_valid(self, form):
-        new_movie = form.save()
-        return super(AddMovieView, self).form_valid(form)
 
 
-class UpdateMovieView(SuccessMessageMixin, UpdateView):
+class MovieUpdateView(SuccessMessageMixin, UpdateView):
     model = Movie
     queryset = Movie.active.all()
     form_class = MoviePageForm
-    template_name = 'movie/add_movie.html'
+    template_name = 'movie/add_update_form.html'
     success_message = '%(title)s updated successfully!'
     success_url = reverse_lazy('movie:movie_list')
-    login_required = True
 
 
-class SoftDeleteView(SuccessMessageMixin, SingleObjectMixin, View):
+class MovieSoftDeleteView(SingleObjectMixin, View):
     model = Movie
-    login_required = True
 
     def post(self, *args, **kwargs):
         movie = super(SoftDeleteView, self).get_object()
         movie.is_active = False
-        messages.success(self.request, movie.title + ' deleted successfully!')
         movie.save()
-        return HttpResponseRedirect('/movie/')
+        messages.success(self.request, movie.title + ' deleted successfully!')
+        return HttpResponseRedirect(reverse('movie:movie_list'))
 
 
-class LikeView(SingleObjectMixin, View):
+class MovieLikeView(SingleObjectMixin, View):
     model = Movie
-    login_required = True
 
     def get(self, *args, **kwargs):
         movie = Movie.objects.get(id=self.request.GET['movie_id'])
         movie.likes += 1
-        likes = movie.likes
         movie.save()
+        likes = movie.likes
         return HttpResponse(likes)
