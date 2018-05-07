@@ -30,13 +30,15 @@ class MovieListView(ListView):
 
         if last_visit:
             # If user already visited,
-            # Then visit_to_print = latest_visit
-            # then update latest_visit to now
+            # then visit_to_print = latest_visit
+            # and update latest_visit to now
             self.request.session['visit_to_print'] = last_visit
-            self.request.session['latest_visit'] = datetime.now().strftime("%b %d %Y %I:%M %p")
+            self.request.session['latest_visit'] = datetime.now()\
+                .strftime("%b %d %Y %I:%M %p")
         else:
-            # if user didn't visit before, create latest visit to now
-            self.request.session['latest_visit'] = datetime.now().strftime("%b %d %Y %I:%M %p")
+            # If user didn't visit before, create latest visit to now
+            self.request.session['latest_visit'] = datetime.now()\
+                .strftime("%b %d %Y %I:%M %p")
             self.request.session['visit_to_print'] = None
 
         context['visit'] = self.request.session['visit_to_print']
