@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
+from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
@@ -17,8 +17,6 @@ from django.views.generic.detail import SingleObjectMixin
 
 from .models import Movie
 from .forms import MoviePageForm
-
-from datetime import datetime
 
 
 class MovieListView(ListView):
