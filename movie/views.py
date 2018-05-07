@@ -46,12 +46,9 @@ class MovieListView(ListView):
 
 class MovieDetailView(DetailView):
     model = Movie
+    queryset = Movie.active.all()
     template_name = 'movie/detail.html'
     context_object_name = 'movie'
-
-    def get_queryset(self):
-        queryset = self.model.active.all()
-        return queryset
 
 
 class AddMovieView(SuccessMessageMixin, CreateView):
