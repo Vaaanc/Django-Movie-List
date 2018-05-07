@@ -30,7 +30,7 @@
           <div class="movie-image">
             <a href="{% url 'movie:movie_detail' movie.slug %}">
             {% if movie.picture %}
-            <img src = "/media/{{ movie.picture }}" class="movie-pic"/>
+            <img src = "{{movie.picture.url}}" class="movie-pic"/>
             {% else %}
             <img src = "{% static 'image/image-placeholder.jpg' %}" class="movie-pic"/>
             {% endif %}
@@ -72,7 +72,7 @@
   <div class="pagination">
     <span class="step-links">
       {% if page_obj.has_previous %}
-        <a href="?page_obj = {{ page_obj.previous_page_number }}" class="button">Previous</a>
+        <a href="?page = {{ page_obj.previous_page_number }}" class="button">Previous</a>
       {% endif %}
       <span class="current">Page {{ page_obj.number }} of {{page_obj.paginator.num_pages}}</span>
       {% if page_obj.has_next %}

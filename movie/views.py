@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render, HttpResponseRedirect, HttpResponse
+from django.shortcuts import render
+from django.shortcuts import HttpResponseRedirect
+from django.shortcuts import HttpResponse
 from .models import Movie
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, View
+from django.views.generic import ListView
+from django.views.generic import DetailView
+from django.views.generic import CreateView
+from django.views.generic import UpdateView
+from django.views.generic import View
 from .forms import MoviePageForm
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
@@ -20,11 +26,10 @@ class MovieListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(MovieListView, self).get_context_data(**kwargs)
-
         # GET LAST VISIT
         last_visit = self.request.session.get('latest_visit')
         is_visited = False
-
+        
         if last_visit:
             # If user already visited, update is_visited to true then visit to print = last visit then update latest to now
             is_visited = True
@@ -37,7 +42,6 @@ class MovieListView(ListView):
 
         context['visit'] = self.request.session['visit_to_print']
         context['is_visited'] = is_visited
-
         return context
 
 class MovieDetailView(DetailView):
@@ -47,7 +51,6 @@ class MovieDetailView(DetailView):
 
     def get_queryset(self):
         queryset = self.model.active.all()
-
         return queryset
 
 class AddMovieView(SuccessMessageMixin, CreateView):
@@ -72,7 +75,6 @@ class UpdateMovieView(SuccessMessageMixin, UpdateView):
 
     def get_queryset(self):
         queryset = self.model.active.all()
-
         return queryset
 
 class SoftDeleteView(SuccessMessageMixin, SingleObjectMixin, View):
