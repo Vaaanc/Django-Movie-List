@@ -1,20 +1,24 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.shortcuts import render
-from django.shortcuts import HttpResponseRedirect
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import HttpResponse
-from .models import Movie
-from django.views.generic import ListView
+from django.shortcuts import HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic import CreateView
 from django.views.generic import UpdateView
+from django.views.generic import ListView
 from django.views.generic import View
-from .forms import MoviePageForm
-from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib import messages
 from django.views.generic.detail import SingleObjectMixin
+
+from .models import Movie
+from .forms import MoviePageForm
+
 from datetime import datetime
-from django.contrib.auth.decorators import login_required
 
 
 class MovieListView(ListView):
@@ -53,28 +57,24 @@ class MovieDetailView(DetailView):
 
 class AddMovieView(SuccessMessageMixin, CreateView):
     form_class = MoviePageForm
-    success_url = '/movie/'
+    success_url = reverse_lazy('movie:movie_list')
     template_name = 'movie/add_movie.html'
     success_message = "%(title)s created successfully!"
     login_required = True
 
     def form_valid(self, form):
-        new_movie = form.save(commit=False)
-        new_movie.save()
+        new_movie = form.save()
         return super(AddMovieView, self).form_valid(form)
 
 
 class UpdateMovieView(SuccessMessageMixin, UpdateView):
     model = Movie
+    queryset = Movie.active.all()
     form_class = MoviePageForm
     template_name = 'movie/add_movie.html'
     success_message = '%(title)s updated successfully!'
-    success_url = '/movie/'
+    success_url = reverse_lazy('movie:movie_list')
     login_required = True
-
-    def get_queryset(self):
-        queryset = self.model.active.all()
-        return queryset
 
 
 class SoftDeleteView(SuccessMessageMixin, SingleObjectMixin, View):
@@ -94,7 +94,6 @@ class LikeView(SingleObjectMixin, View):
     login_required = True
 
     def get(self, *args, **kwargs):
-        print self.request.GET['movie_id']
         movie = Movie.objects.get(id=self.request.GET['movie_id'])
         movie.likes += 1
         likes = movie.likes
